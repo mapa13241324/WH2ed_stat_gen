@@ -1,0 +1,13 @@
+<Window x:Class="MyApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MyApp" Height="420" Width="720">
+  <Grid Margin="16">
+    <StackPanel>
+      <TextBlock Text="Hello from MyApp" FontSize="28" Margin="0,0,0,12"/>
+      <TextBlock Text="Repo skonfigurowane pod AI‑PR flow." TextWrapping="Wrap"/>
+      <Button Content="Kliknij" Padding="12" Margin="0,16,0,0" Click="OnClick"/>
+      <TextBlock x:Name="Status"/>
+    </StackPanel>
+  </Grid>
+</Window>

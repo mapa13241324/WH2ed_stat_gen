@@ -1,14 +1,15 @@
 name: AI PR Bot
 
 on:
-  workflow_dispatch:          # ręczne uruchomienie (awaryjnie)
+  workflow_dispatch:                # pozwala uruchomić ręcznie z Actions
   issues:
-    types: [opened, edited, labeled]   # start na nowe Issue / edycję / nadanie labela
+    types: [opened, edited, labeled]
 
 jobs:
   plan-and-pr:
-    # Jeśli chcesz wymagać labela ai-task, odkomentuj następną linię:
+    # jeśli chcesz, aby działał TYLKO z etykietą ai-task, odkomentuj następną linię:
     # if: ${{ contains(github.event.issue.labels.*.name, 'ai-task') }}
+
     runs-on: ubuntu-latest
     permissions:
       contents: write

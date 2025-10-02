@@ -1,13 +1,14 @@
 name: AI PR Bot
 
 on:
+  workflow_dispatch:          # ręczne uruchomienie (awaryjnie)
   issues:
-    types: [opened, edited, labeled]
+    types: [opened, edited, labeled]   # start na nowe Issue / edycję / nadanie labela
 
 jobs:
   plan-and-pr:
-    # Działa tylko, gdy event to 'issues' i jest etykieta 'ai-task'
-    if: ${{ github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'ai-task') }}
+    # Jeśli chcesz wymagać labela ai-task, odkomentuj następną linię:
+    # if: ${{ contains(github.event.issue.labels.*.name, 'ai-task') }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -23,12 +24,11 @@ jobs:
         run: mkdir -p app/dotnet/MyApp
 
       - name: Generate minimal change
-        run: echo "// AI TODO generated" > app/dotnet/MyApp/AI_TODO.cs
+        run: echo "// AI TODO generated $(date -u +%FT%TZ)" > app/dotnet/MyApp/AI_TODO.cs
 
       - name: Create PR
         uses: peter-evans/create-pull-request@v6
         with:
-          branch: feature/ai-${{ github.event.issue.number }}
-          title: AI: ${{ github.event.issue.title }}
-          body: "Automatyczny PR na podstawie #${{ github.event.issue.number }}"
-
+          branch: feature/ai-${{ github.event.issue.number || 'manual' }}
+          title: AI: ${{ github.event.issue.title || 'Manual trigger' }}
+          body: "Automatyczny PR na podstawie #${{ github.event.issue.number || 'manual' }}"

@@ -1,25 +1,34 @@
 name: AI PR Bot
+
 on:
   issues:
     types: [opened, edited, labeled]
+
 jobs:
   plan-and-pr:
-    if: contains(github.event.issue.labels.*.name, 'ai-task')
+    # Działa tylko, gdy event to 'issues' i jest etykieta 'ai-task'
+    if: ${{ github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'ai-task') }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
+      issues: read
+
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      - name: Generate changes
+          fetch-depth: 0
+
+      - name: Ensure target path exists
+        run: mkdir -p app/dotnet/MyApp
+
+      - name: Generate minimal change
         run: echo "// AI TODO generated" > app/dotnet/MyApp/AI_TODO.cs
+
       - name: Create PR
         uses: peter-evans/create-pull-request@v6
         with:
           branch: feature/ai-${{ github.event.issue.number }}
           title: AI: ${{ github.event.issue.title }}
           body: "Automatyczny PR na podstawie #${{ github.event.issue.number }}"
+

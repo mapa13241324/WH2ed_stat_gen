@@ -1,9 +1,10 @@
 name: AI PR Bot
 
 on:
-  workflow_dispatch:                # pozwala uruchomić ręcznie z Actions
+  workflow_dispatch: {}    # <-- to włącza przycisk Run workflow
   issues:
     types: [opened, edited, labeled]
+
 
 jobs:
   plan-and-pr:
